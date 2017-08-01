@@ -191,10 +191,10 @@
           <hr>
           <%}%>
           
-          <%if(!((String)request.getAttribute("OGUser")).equals("")){ %>
+          <%ArrayList<Photo> Sphotos=(ArrayList<Photo>)request.getAttribute("Shared");
+          	if(Sphotos!=null){ %>
 		  <div id="PContainer" class="row small-up-2 medium-up-3 large-up-4">
-          	<%	ArrayList<Photo> Sphotos=(ArrayList<Photo>)request.getAttribute("Shared");
-          	  	for(Photo photo:Sphotos){%>
+          	<%	for(Photo photo:Sphotos){%>
           	  	<div class="column">
           	  		<img class="thumbnail" id=<%=photo.getLurl()%> src=<%=photo.getSurl()%>>
           	  		<input type="hidden" id=<%=("owner"+photo.getLurl())%> value=<%=photo.getOwner()%>>
