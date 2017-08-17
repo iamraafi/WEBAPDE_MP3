@@ -24,7 +24,10 @@ public class Person {
 	private String password;
 	
 	@Column(name = "description")
-	private String description="";
+	private String description;
+	
+	@Column(name = "cookie")
+	private String cookie;
 	private ArrayList<Photo> PhotoList;
 	
 	public Person() {

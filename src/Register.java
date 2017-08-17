@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Person;
+import services.PersonServices;
 import utility.CreatePersonList;
 import utility.RegisterUser;
 
@@ -46,22 +47,28 @@ public class Register extends HttpServlet {
     		request.getRequestDispatcher("RegisterPage.jsp").forward(request, response);
 		}else{
 
-			Person person=RegisterUser.TrytoRegister(request.getParameter("username"),
-					request.getParameter("password"), request.getParameter("description"));
-			if(person==null){
-	    		request.setAttribute("RegError" , "username is already taken");
-	    		request.getRequestDispatcher("RegisterPage.jsp").forward(request, response);
-			}else{
-				CreatePersonList.AddPerson(person);
-				Cookie cookie=new Cookie("User",person.getUsername());
-	    		response.addCookie(cookie);
-	    		request.setAttribute("Ousername" , person.getUsername());
-	    		request.setAttribute("username" , person.getUsername());
-	    		request.setAttribute("description" , person.getDescription());
-	    		request.setAttribute("photos" , person.getPhotoList());
-	    		System.out.println("teststt");
-	    		request.getRequestDispatcher("/Profile.jsp").forward(request, response);
-			}
+			String username = request.getParameter("username");
+			String password = request.getParameter("password");
+			String description = request.getParameter("description");
+			
+			PersonServices.createPerson(username, password, description);
+			
+//			Person person=RegisterUser.TrytoRegister(request.getParameter("username"),
+//					request.getParameter("password"), request.getParameter("description"));
+//			if(person==null){
+//	    		request.setAttribute("RegError" , "username is already taken");
+//	    		request.getRequestDispatcher("RegisterPage.jsp").forward(request, response);
+//			}else{
+//				CreatePersonList.AddPerson(person);
+//				Cookie cookie=new Cookie("User",person.getUsername());
+//	    		response.addCookie(cookie);
+//	    		request.setAttribute("Ousername" , person.getUsername());
+//	    		request.setAttribute("username" , person.getUsername());
+//	    		request.setAttribute("description" , person.getDescription());
+//	    		request.setAttribute("photos" , person.getPhotoList());
+//	    		System.out.println("teststt");
+//	    		request.getRequestDispatcher("/Profile.jsp").forward(request, response);
+//			}
 	}
 		//System.out.println(person.getUsername());
 	}

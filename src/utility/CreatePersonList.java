@@ -38,7 +38,7 @@ public final class CreatePersonList {
 						person.getUsername()+i,true,person.getUsername());
 				photo.addtag("water");
 				photo.addtag("crool");
-				person.addPhoto(photo);
+				//person.addPhoto(photo);
 			}
 			for(;i<10;i++){
 				String color=ranColor();
@@ -53,7 +53,7 @@ public final class CreatePersonList {
 				while((user2=PersonList.get((int )((Math.random() * 10) + 0)).getUsername()).equals(person.getUsername())||
 						(user2=PersonList.get((int )((Math.random() * 10) + 0)).getUsername()).equals(user));
 				photo.sharewith(user2);
-				person.addPhoto(photo);
+				//person.addPhoto(photo);
 			}
 		}
 	}
