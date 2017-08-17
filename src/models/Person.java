@@ -28,6 +28,7 @@ public class Person {
 	
 	@Column(name = "cookie")
 	private String cookie;
+	
 	private ArrayList<Photo> PhotoList;
 	
 	public Person() {
@@ -83,7 +84,17 @@ public class Person {
 		return PhotoList;
 	}
 
+	public String getCookie() {
+		return cookie;
+	}
+
+	public void setCookie(String cookie) {
+		this.cookie = cookie;
+	}
+
 	public void setPhotoList(ArrayList<Photo> photoList) {
 		PhotoList = photoList;
 	}
+	
+	
 }
