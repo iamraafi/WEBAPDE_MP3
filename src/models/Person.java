@@ -26,11 +26,6 @@ public class Person {
 	@Column(name = "description")
 	private String description;
 	
-	@Column(name = "cookie")
-	private String cookie;
-	
-	private ArrayList<Photo> PhotoList;
-	
 	public Person() {
 		
 	}
@@ -45,7 +40,6 @@ public class Person {
 			this.description=description;
 		this.username=username;
 		this.password=password;
-		PhotoList=new ArrayList<Photo>();
 	}
 
 	public int getId() {
@@ -79,22 +73,4 @@ public class Person {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public ArrayList<Photo> getPhotoList() {
-		return PhotoList;
-	}
-
-	public String getCookie() {
-		return cookie;
-	}
-
-	public void setCookie(String cookie) {
-		this.cookie = cookie;
-	}
-
-	public void setPhotoList(ArrayList<Photo> photoList) {
-		PhotoList = photoList;
-	}
-	
-	
 }

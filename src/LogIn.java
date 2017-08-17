@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Person;
+import services.PersonServices;
 import utility.CreatePersonList;
 import utility.LogInCheck;
 
@@ -50,7 +51,11 @@ public class LogIn extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//request.getRequestDispatcher("/ProtectedPage.jsp").forward(request, response);
-		Person person=LogInCheck.LoggingIn(request.getParameter("username"),request.getParameter("password"));
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		
+		Person person = PersonServices.login(username, password);
+		//Person person=LogInCheck.LoggingIn(request.getParameter("username"),request.getParameter("password"));
     	if(person==null){
     		request.setAttribute("LogError" , "wrong combination of username and password");
     		request.getRequestDispatcher("LogInPage.jsp").forward(request, response);
