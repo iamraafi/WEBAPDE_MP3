@@ -2,6 +2,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html class="no-js" lang="en">
   <head>
@@ -138,11 +139,14 @@
 		        <div class="top-bar-left">
 		          <ul class="dropdown menu" data-dropdown-menu>
 		             <li class="menu-text">
-		             <%if(((String)request.getAttribute("OGUser")).equals("")){ %>
-		             <form method="post" action="/WEBAPDE_MP2/LinkedUser">
-		             <%}else{%>
-		             <form method="post" action="/WEBAPDE_MP2/LogOut">
-		             <%}%>
+		             <c:choose>
+		             	<c:when test="${requestScope.OGUser.equals('')}">
+		             		<form method="post" action="/WEBAPDE_MP2/LinkedUser">
+		             	</c:when>
+		             	<c:otherwise>
+		             		<form method="post" action="/WEBAPDE_MP2/LogOut">
+		             	</c:otherwise>
+		             </c:choose>
 		             <input type="hidden" name="USER" value=<%=request.getAttribute("OGUser")%>>
 		             <input type="submit" value="Not Facebook" style="background:none;cursor: pointer;border-width:0px;">
 		             </form></li>
@@ -156,9 +160,13 @@
 		            		<li><input type="submit" value="Search" class="button"/><li>
 		          		</ul>
 		     		</form></li>
-		            <%if((boolean)request.getAttribute("signed")) {%>
+		     		
+		            
+		            <c:if test="${requestScope.signed}">
 		            	<li><form action="/WEBAPDE_MP2/LogOut" method="post"><input type="submit" value="Log out" class="button"/></form></li>
-		          	<%}%>
+		            </c:if>
+		            	
+		          	
 		          </ul>
 		        </div>
 		      </div>
@@ -172,15 +180,12 @@
           	<%	ArrayList<Photo> Uphotos=(ArrayList<Photo>)request.getAttribute("Photos");
           	  	for(Photo photo:Uphotos){%>
           	  	<div class="column">
-          	  		<img class="thumbnail" id=<%=photo.getLurl()%> src=<%=photo.getSurl()%>>
-          	  		<input type="hidden" id=<%=("owner"+photo.getLurl())%> value=<%=photo.getOwner()%>>
-			        <input type="hidden" id=<%=("title"+photo.getLurl())%> value=<%=photo.getName()%>>
-			        <input type="hidden" id=<%=("tag"+photo.getLurl())%> value=<%=photo.getHtmlTag()%>>
-			        <input type="hidden" id=<%=("share"+photo.getLurl())%> value=<%=photo.getHtmlShare()%>>
+          	  		<img class="thumbnail" id=<%=photo.getName()%> src="/WEBAPDE_MP2/image.html?id=<%=photo.getId()%>">
           	  	</div>		
           	  	<%}%>
           </div>
-          <%if((boolean)request.getAttribute("original")) {%>
+        
+          <c:if test="${requestScope.original}">
           <div class="row">
                 <button id="up_button" class="button expanded">upload</button>
           </div>
@@ -189,18 +194,14 @@
               <h1 id="album_title">shared photos</h1>
           </div>
           <hr>
-          <%}%>
+          <</c:if>
           
           <%ArrayList<Photo> Sphotos=(ArrayList<Photo>)request.getAttribute("Shared");
           	if(Sphotos!=null){ %>
 		  <div id="PContainer" class="row small-up-2 medium-up-3 large-up-4">
           	<%	for(Photo photo:Sphotos){%>
           	  	<div class="column">
-          	  		<img class="thumbnail" id=<%=photo.getLurl()%> src=<%=photo.getSurl()%>>
-          	  		<input type="hidden" id=<%=("owner"+photo.getLurl())%> value=<%=photo.getOwner()%>>
-			        <input type="hidden" id=<%=("title"+photo.getLurl())%> value=<%=photo.getName()%>>
-			        <input type="hidden" id=<%=("tag"+photo.getLurl())%> value=<%=photo.getHtmlTag()%>>
-			        <input type="hidden" id=<%=("share"+photo.getLurl())%> value=<%=photo.getHtmlShare()%>>
+          	  		<img class="thumbnail" id=<%=photo.getName()%> src="/WEBAPDE_MP2/image.html?id=<%=photo.getId()%>">
           	  	</div>		
           	  	<%}%>
           </div>
@@ -212,29 +213,7 @@
         <span class="close">&times;</span>
         <img class="modal-content" id="img01">
         <div id="caption"></div>
-        <div>
-        <button id='pubbton' class='button ' style="display: none;">public</button>
-        <button id='pribton' class='button ' style="display: none;">private</button>
-        </div>
-        <div>
-        <input type='text' id='tagin' placeholder='tags' style="display: none;width;30%">
-        </div>
-        <div><button id='tagbton' class='button ' style="display: none;">tag it</button></div>
-        <div>
-        	<input type='text'id='shareit' placeholder='sharewith'  style="display: none;width;30%">
-        </div>
-        <div><button id="sharebton" class="button" style="display: none;">share it</button></div>
-        <div>
-        	<form method="post" action="WEBAPDE_MP2/UPLOAD">
-        	<input type="hidden" id="privacy" name="privacy" value="public">
-        	<input type="hidden" name="srcpic" value="http://placehold.it/600x600">
-        	<input type="hidden" name="thpic" value="http://placehold.it/150x150">
-        	<input type="hidden" id="hidtag" name="tagsU" value="">
-        	<input type="hidden" id="hidshare" name="shareU" value="">
-        	<input type="submit"class='button' id="subm" style="display: none;" value="UPLOAD"/>
-        	</form>
-        </div>
-        
+  
     </div>
     
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -248,25 +227,25 @@
         var captionText=document.getElementById("caption");
 	        $(".thumbnail").click(function(){
 	            modal.style.display="block";
-	            modalImg.src=this.id;
-	            var src=this.id;
-	            var title=document.getElementById("title"+this.id).value;
+	            modalImg.src=this.src;
+	            //var src=this.id;
+	            //var title=document.getElementById("title"+this.id).value;
 
-    	   	  var sharewith=document.getElementById("share"+this.id).value.split(',');
-    	   	  var shared="";
-    	   	  for(var i=0;i<sharewith.length;i++){
-    	   		  shared+="<input type='submit' name='USER' style='background:none;cursor: pointer;border-width:0px;' value='"+sharewith[i]+"'/>";
-    	   	  }
-    		 	  var tag=document.getElementById("tag"+this.id).value.split(',');
-    		 	  var tagged="";
-    	   	  for(var i=0;i<tag.length;i++){
-    	   		  tagged+="<p>"+tag[i]+"</p>";
-    	   	  }
-    		  var name=document.getElementById("owner"+this.id).value;
-    	   	  var Thtml='<h3>'+title+' by:<a>'+name+'</a></h3>';
-    	   	  var Shtml='<div class="dropdown"><span>shared with</span><div class="dropdown-content"><form action="/WEBAPDE_MP2/LinkedUser" method="POST">'+shared+'</form></div></div>';
-    	   	  var taghtml='<div class="dropdown"><span>tag</span><div class="dropdown-content">'+tagged+'</div></div>';
-    	      	captionText.innerHTML= Thtml+Shtml+'&emsp;'+taghtml;          
+    	   	  //var sharewith=document.getElementById("share"+this.id).value.split(',');
+    	   	  //var shared="";
+    	   	  //for(var i=0;i<sharewith.length;i++){
+    	   		  //shared+="<input type='submit' name='USER' style='background:none;cursor: pointer;border-width:0px;' value='"+sharewith[i]+"'/>";
+    	   	  //}
+    		 	  //var tag=document.getElementById("tag"+this.id).value.split(',');
+    		 	  //var tagged="";
+    	   	  //for(var i=0;i<tag.length;i++){
+    	   	//	  tagged+="<p>"+tag[i]+"</p>";
+    	   	  //}
+    		  //var name=document.getElementById("owner"+this.id).value;
+    	   	  //var Thtml='<h3>'+title+' by:<a>'+name+'</a></h3>';
+    	   	  //var Shtml='<div class="dropdown"><span>shared with</span><div class="dropdown-content"><form action="/WEBAPDE_MP2/LinkedUser" method="POST">'+shared+'</form></div></div>';
+    	   	  //var taghtml='<div class="dropdown"><span>tag</span><div class="dropdown-content">'+tagged+'</div></div>';
+    	     // 	captionText.innerHTML= Thtml+Shtml+'&emsp;'+taghtml;          
     	    });
     	    $("span.close").click(function(){
     	        modal.style.display="none";
